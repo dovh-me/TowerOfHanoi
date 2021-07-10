@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="basePane" prefHeight="386.0" prefWidth="962.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<AnchorPane fx:id="basePane" prefHeight="386.0" prefWidth="962.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
       <AnchorPane layoutX="39.0" layoutY="109.0">
          <children>
@@ -54,6 +54,7 @@
       </AnchorPane>
       <Label fx:id="swapCount" layoutX="26.0" layoutY="27.0" prefHeight="18.0" prefWidth="137.0" text="Swap Count: " />
       <Button fx:id="undoButton" layoutX="781.0" layoutY="102.0" mnemonicParsing="false" onAction="#undoLastMove" prefHeight="34.0" prefWidth="166.0" text="Undo Move" />
+      <Button layoutX="33.0" layoutY="347.0" mnemonicParsing="false" onAction="#fastForward" text="Fast Forward &gt;&gt;&gt;" />
       <AnchorPane fx:id="endPane" prefHeight="386.0" prefWidth="962.0" style="-fx-background-color: #000000ee;" visible="false">
          <children>
             <Label layoutX="330.0" layoutY="27.0" text="Congratulations" textFill="#c79f00">

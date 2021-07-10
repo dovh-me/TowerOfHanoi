@@ -1,5 +1,7 @@
 package Classes;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -52,9 +54,15 @@ public class Game {
     //------------------------------------------------------------------------------------------
 
     //Custom methods
-    public void swapAction(Node towerTriggered){
+    public void swapAction(Node towerTriggered,Tower towerTriggeredFastForward){
         //Doesn't perform the swap if both source and target are the same
-        Tower triggeredTower = getTowerBySource(towerTriggered);
+        Tower triggeredTower;
+        //when fast forwarding
+        if(towerTriggeredFastForward != null) triggeredTower = towerTriggeredFastForward;
+
+        //when a real player is playing
+        else triggeredTower = getTowerBySource(towerTriggered);
+
         if (this.source == null){
             this.source = triggeredTower;
             System.out.println("Source Set: " + this.source.getTowerId());
@@ -103,7 +111,7 @@ public class Game {
         for (Tower tower : towers) {
             tower.getTowerNode().setOnMouseClicked(event -> {
                 if(event.getSource() instanceof VBox)
-                    swapAction((Node) event.getSource());
+                    swapAction((Node) event.getSource(),null);
             });
         }
     }
@@ -120,9 +128,43 @@ public class Game {
         return null;
     }
 
+    public Tower getTowerBySource(VBox sourceNode){
+        for (Tower tower: this.towers) {
+            if(tower.getTowerNode() == sourceNode)
+                return tower;
+        }
+        return null;
+    }
+
     public void undoLastMove(){
         actions.removeLast().undo();
         numberOfSwaps.set(numberOfSwaps.get() - 1);
+    }
+
+    public void fastForward(){
+        BooleanProperty booleanProperty = new SimpleBooleanProperty();
+
+        booleanProperty.addListener(new InvalidationListener() {
+            @Override
+            public void invalidated(Observable observable) {
+
+            }
+        });
+        int test = 1;
+        ArrayList<int[]> winMoves = new ArrayList<>();
+        winMoves.add(new int[]{0,0,2});
+        winMoves.add(new int[]{0,0,1});
+        winMoves.add(new int[]{2,2,1});
+        winMoves.add(new int[]{0,0,2});
+        winMoves.add(new int[]{1,2,0});
+        winMoves.add(new int[]{1,1,2});
+        winMoves.add(new int[]{0,0,2});
+        new Thread(){
+
+        };
+    }
+    public void actionFastForwardExecution(int[] actionInt){
+        new Action(this.towers[actionInt[0]].getBlocksInTower().peek(),this.towers[actionInt[1]],this.towers[actionInt[2]]).execute();
     }
     //------------------------------------------------------------------------------------------
 

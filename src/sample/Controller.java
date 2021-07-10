@@ -2,15 +2,11 @@ package sample;
 
 import Classes.Game;
 import Classes.Tower;
-import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.IntegerBinding;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.property.*;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -22,7 +18,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
 
 
 public class Controller implements Initializable {
@@ -45,6 +44,8 @@ public class Controller implements Initializable {
     public static AnchorPane mainPane;
     public static Label swapCountStaticLabel;
 
+    public Tower[] towers;
+
     Game game;
 
     public void newGame(){
@@ -54,7 +55,8 @@ public class Controller implements Initializable {
         Tower startTower = new Tower(startTowerNode,"111",true,false);
         Tower midTower = new Tower(midTowerNode,"222",false,false);
         Tower endTower = new Tower(endTowerNode,"333",false,true);
-        game = new Game(new Tower[]{startTower,midTower,endTower},
+        this.towers = new Tower[]{startTower,midTower,endTower};
+        game = new Game(towers,
                 block1,
                 block2,
                 block3
@@ -89,15 +91,15 @@ public class Controller implements Initializable {
 
         startTower.getTowerNode().setOnMouseClicked(event -> {
             if(event.getSource() instanceof VBox)
-                game.swapAction((Node) event.getSource());
+                game.swapAction((Node) event.getSource(),null);
         });
         midTower.getTowerNode().setOnMouseClicked(event -> {
             if(event.getSource() instanceof VBox)
-                game.swapAction((Node) event.getSource());
+                game.swapAction((Node) event.getSource(),null);
         });
         endTower.getTowerNode().setOnMouseClicked(event -> {
             if(event.getSource() instanceof VBox) {
-                game.swapAction((Node) event.getSource());
+                game.swapAction((Node) event.getSource(),null);
                 if(game.hasGameEnded()) basePane.setDisable(true);
             }
         });
@@ -117,6 +119,62 @@ public class Controller implements Initializable {
 
     public void undoLastMove(){
         game.undoLastMove();
+    }
+
+    public void fastForward(){
+        ArrayList<int[]> winMoves = new ArrayList<>();
+        winMoves.add(new int[]{0,2});
+        winMoves.add(new int[]{0,1});
+        winMoves.add(new int[]{2,1});
+        winMoves.add(new int[]{0,2});
+        winMoves.add(new int[]{1,0});
+        winMoves.add(new int[]{1,2});
+        winMoves.add(new int[]{0,2});
+
+        Iterator<int[]> winMoveIterator = winMoves.iterator();
+
+        BooleanProperty fastForwardNextStep = new SimpleBooleanProperty();
+
+        fastForwardNextStep.addListener(observable -> {
+            if (fastForwardNextStep.get()) {
+                fastForwardExecution(winMoveIterator,fastForwardNextStep);
+            }
+        });
+
+        //starting the iteration so that the process continues after that
+        fastForwardExecution(winMoveIterator,fastForwardNextStep);
+
+    }
+
+    public void fastForwardExecution(Iterator<int[]> winMoveIterator,BooleanProperty fastForwardNextStep){
+        if(!winMoveIterator.hasNext()) return;
+        int[] winMoveIndices = winMoveIterator.next();
+        fastForwardSwapAction(winMoveIndices[0],winMoveIndices[1]);
+        actionSleep(fastForwardNextStep);
+    }
+
+    public void fastForwardSwapAction(int sourceIndex,int targetIndex){
+        game.swapAction(null,towers[sourceIndex]);
+        game.swapAction(null,towers[targetIndex]);
+    }
+
+    public void actionSleep(BooleanProperty fastForwardNextStep){
+        Thread thread = null;
+
+        Thread finalThread = thread;
+        Task<Boolean> testBoolean = new Task<Boolean>() {
+            @Override
+            protected Boolean call() throws Exception {
+                finalThread.sleep(1000);
+                updateValue(false);
+                updateValue(true);
+                return true;
+            }
+        };
+        thread = new Thread(testBoolean);
+        thread.setDaemon(true);
+        thread.start();
+        fastForwardNextStep.bind(testBoolean.valueProperty());
     }
 
     @Override
