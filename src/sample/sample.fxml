@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
@@ -62,7 +66,7 @@
                   <Font name="Berlin Sans FB Demi Bold" size="42.0" />
                </font>
             </Label>
-            <Label layoutX="333.0" layoutY="89.0" text="You have successfully solved the puzzel" textFill="#dfdfdf">
+            <Label layoutX="333.0" layoutY="89.0" text="You have successfully solved the puzzle" textFill="#dfdfdf">
                <font>
                   <Font name="System Bold Italic" size="16.0" />
                </font>
@@ -79,6 +83,57 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="welcomePane" focusTraversable="true" prefHeight="386.0" prefWidth="962.0" style="-fx-background-color: #000000ee;">
+         <children>
+            <Label layoutX="317.0" layoutY="45.0" text="Login Or Register" textFill="#0062c7">
+               <font>
+                  <Font name="Berlin Sans FB Demi Bold" size="42.0" />
+               </font>
+            </Label>
+            <Label layoutX="340.0" layoutY="14.0" text="Welcome to Tower Of Hanoi" textFill="#dfdfdf">
+               <font>
+                  <Font name="System Bold Italic" size="21.0" />
+               </font>
+            </Label>
+            <Button fx:id="newGameButtonEndPane1" layoutX="340.0" layoutY="193.0" mnemonicParsing="false" onAction="#newGame" prefHeight="34.0" prefWidth="278.0" text="Play as a Guest" />
+            <Button layoutX="714.0" layoutY="337.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="232.0" text="View Leaderboard" />
+            <Label fx:id="swapScore1" layoutX="14.0" layoutY="344.0" text="Compelete with the least number of swaps to be in the leaderboard" textFill="#ffe89c">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <AnchorPane fx:id="loginPane" layoutX="43.0" layoutY="122.0" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="loginUsernameText" layoutY="14.0" prefHeight="26.0" prefWidth="200.0" promptText="Enter Username" />
+                  <TextField fx:id="loginPasswordText" layoutY="75.0" prefHeight="26.0" prefWidth="199.0" promptText="Enter Password" />
+                  <Button layoutY="140.0" mnemonicParsing="false" onAction="#loginUser" prefHeight="26.0" prefWidth="200.0" text="Login" />
+                  <Label layoutY="177.0" onMouseClicked="#showRegisterPane" styleClass="mainPaneLinks" text="Don't have an account?" textFill="WHITE">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="registerPane" layoutX="43.0" layoutY="122.0" prefHeight="200.0" prefWidth="200.0" visible="false">
+               <children>
+                  <TextField fx:id="registerUsernameText" layoutY="14.0" prefHeight="26.0" prefWidth="200.0" promptText="New Username" />
+                  <TextField fx:id="registerPasswordText" layoutY="75.0" prefHeight="26.0" prefWidth="199.0" promptText="New Password" />
+                  <Button layoutY="140.0" mnemonicParsing="false" onAction="#registerUser" prefHeight="26.0" prefWidth="200.0" text="Register" />
+                  <Label layoutY="177.0" onMouseClicked="#showLoginPane" styleClass="mainPaneLinks" text="Already have an account?" textFill="WHITE">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <TableView fx:id="leaderboardTableView" layoutX="736.0" layoutY="110.0" prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                <TableColumn fx:id="nameColumn" prefWidth="112.800048828125" text="Username" />
+                <TableColumn fx:id="minSwapColumn" prefWidth="85.5999755859375" text="Min Swaps" />
+              </columns>
+            </TableView>
          </children>
       </AnchorPane>
    </children>

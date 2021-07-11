@@ -1,0 +1,3 @@
+e,0,0,e,e,0
+Osura,2,3,mighty,thisIsPassword,0
+e,0,0,e,e,0

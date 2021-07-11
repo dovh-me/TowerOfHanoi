@@ -1,3 +1,7 @@
 .tower:hover{
     -fx-background-color: #eee;
 }
+
+.mainPaneLinks:hover{
+    -fx-text-fill: #2150ff;
+}

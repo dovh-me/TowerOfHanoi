@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class Game {
+    public Player activePlayer;
     BooleanProperty hasGameEndProperty;
     IntegerProperty numberOfSwaps;
     Block[] blocks;
@@ -71,7 +72,7 @@ public class Game {
             this.target = triggeredTower;
             System.out.println("Target Set: " + this.target.getTowerId());
         }
-        else if(this.source == this.target){
+        if(this.source == this.target){
             this.source = null;
             this.target = null;
             System.out.println("Source and Target has been reset");
@@ -84,6 +85,15 @@ public class Game {
             actions.add(currentAction);
             this.source = null;
             this.target = null;
+
+            //get the tower value - for the fast forward feature
+            int[] preExecutionGameState = new int[towers.length];
+            for (int i = 0; i < towers.length; i++) {
+                preExecutionGameState[i] = towers[0].getTowerValue();
+            }
+            currentAction.setPreExecutionGameState(preExecutionGameState);
+
+            //action execution
             currentAction.execute();
             Controller.undoStaticButton.setDisable(false);
 
@@ -141,31 +151,31 @@ public class Game {
         numberOfSwaps.set(numberOfSwaps.get() - 1);
     }
 
-    public void fastForward(){
-        BooleanProperty booleanProperty = new SimpleBooleanProperty();
-
-        booleanProperty.addListener(new InvalidationListener() {
-            @Override
-            public void invalidated(Observable observable) {
-
-            }
-        });
-        int test = 1;
-        ArrayList<int[]> winMoves = new ArrayList<>();
-        winMoves.add(new int[]{0,0,2});
-        winMoves.add(new int[]{0,0,1});
-        winMoves.add(new int[]{2,2,1});
-        winMoves.add(new int[]{0,0,2});
-        winMoves.add(new int[]{1,2,0});
-        winMoves.add(new int[]{1,1,2});
-        winMoves.add(new int[]{0,0,2});
-        new Thread(){
-
-        };
-    }
-    public void actionFastForwardExecution(int[] actionInt){
-        new Action(this.towers[actionInt[0]].getBlocksInTower().peek(),this.towers[actionInt[1]],this.towers[actionInt[2]]).execute();
-    }
+//    public void fastForward(){
+//        BooleanProperty booleanProperty = new SimpleBooleanProperty();
+//
+//        booleanProperty.addListener(new InvalidationListener() {
+//            @Override
+//            public void invalidated(Observable observable) {
+//
+//            }
+//        });
+//        int test = 1;
+//        ArrayList<int[]> winMoves = new ArrayList<>();
+//        winMoves.add(new int[]{0,0,2});
+//        winMoves.add(new int[]{0,0,1});
+//        winMoves.add(new int[]{2,2,1});
+//        winMoves.add(new int[]{0,0,2});
+//        winMoves.add(new int[]{1,2,0});
+//        winMoves.add(new int[]{1,1,2});
+//        winMoves.add(new int[]{0,0,2});
+//        new Thread(){
+//
+//        };
+//    }
+//    public void actionFastForwardExecution(int[] actionInt){
+//        new Action(this.towers[actionInt[0]].getBlocksInTower().peek(),this.towers[actionInt[1]],this.towers[actionInt[2]]).execute();
+//    }
     //------------------------------------------------------------------------------------------
 
     public LinkedList<Action> getActions() {

@@ -6,6 +6,7 @@ public class Action {
     private Block blockSwapped;
     private Tower source;
     private Tower target;
+    private int[] preExecutionGameState;
 
     public Action(Block blockSwapped, Tower source, Tower target) {
         this.blockSwapped = blockSwapped;
@@ -40,6 +41,14 @@ public class Action {
 
     public void setTarget(Tower target) {
         this.target = target;
+    }
+
+    public int[] getPreExecutionGameState() {
+        return preExecutionGameState;
+    }
+
+    public void setPreExecutionGameState(int[] preExecutionGameState) {
+        this.preExecutionGameState = preExecutionGameState;
     }
 
     //custom methods

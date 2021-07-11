@@ -60,4 +60,12 @@ public class Tower {
         this.getTowerNode().getChildren().remove(removedBlock.getShape());
         return removedBlock;
     }
+
+    public int getTowerValue(){
+        int retVal = 0;
+        for(Block block: this.blocksInTower){
+            retVal++;
+        }
+        return retVal;
+    }
 }
